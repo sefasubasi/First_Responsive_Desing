@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" rel="stylesheet" href="css-js/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="css-js/bootstrap-theme.min.css">
+<link type="text/css" rel="stylesheet" href="css-js/dataTables.bootstrap.min.css" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<link href="css-js/style.css" rel="stylesheet" type="text/css" media="all" />
+<script type='text/javascript'>
+var email,pass,name;
+  function veri(){
+      $.ajax({
+        dataType: "xml",
+        url: "key",success: function(xml) {
+          $test = $(xml).find('login_bilgileri');
+          var donus = $test.text();
+          var jo=JSON.parse(donus);
+          var username = jo["username"];
+          var name = jo["name"];
+          var pass = jo["id"];
+          var textid = document.getElementById("x").value;
+          var sifre =  document.getElementById("y").value;
+          if (textid==username && sifre== password)//gecici değiştirildi textid==username
+           {
+             alert("Hoş Geldiniz "+name);
+             window.location = "uygulama.html";
+          }
+          else alert("Kullanıcı adı veya şifre hatalı !");
+        }
+        });
+  }
+</script>
+</head>
+<body>
+	<div class="main-agileinfo slider ">
+		<div class="items-group">
+			<div class="item agileits-w3layouts">
+				<div class="block text main-agileits">
+					<center><label style="font-size:29px; color:black;">Beşiktaş Shipyard</label></center></br></br>
+				  <input type="text" id="x" class="form-control" placeholder="KULLANICI ADI"></br>
+				  <input type="password" id="y" class="form-control" placeholder="*********"></br>
+					<button type="button"class="btn btn-danger btn-block"onclick= "veri()">GIRIS</button></br>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

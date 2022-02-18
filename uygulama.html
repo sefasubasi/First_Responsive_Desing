@@ -1,0 +1,352 @@
+﻿<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+  <head>
+    <title>Uygulama</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <script src="css-js/jquery-1.12.4.min.js"></script>
+     <script language="JavaScript" type="text/javascript" src="css-js/jquery.dataTables.min.js"></script>
+     <script language="JavaScript" type="text/javascript" src="css-js/dataTables.bootstrap.min.js"></script>
+     <script language="JavaScript" type="text/javascript" src="css-js/bootstrap.min.js"></script>
+     <link type="text/css" rel="stylesheet" href="css-js/bootstrap.min.css" />
+     <link type="text/css" rel="stylesheet" href="css-js/bootstrap-theme.min.css">
+     <link type="text/css" rel="stylesheet" href="css-js/dataTables.bootstrap.min.css" />
+     <script type="text/javascript">
+       $(document).ready(function(){
+       $('#example').DataTable();
+       });
+     </script>
+     <script type='text/javascript'>
+     $(window).load(function ()
+     {
+           $(document).ready(function(){
+             var i,ehliyet,xmll,dogumyeri,kangrubu,bulunduguil
+                 $.ajax({
+                   dataType: "xml",
+                   url: "key",success: function(xml) {
+                    xmll = $(xml).find('get_user');
+                    var donus = xmll.text();
+                    jo=JSON.parse(donus);
+                    var index=0;
+                    for(i =0; i<15; i++)
+                    {
+                    var y = jo['user_education'][i];
+                    if(y !=null)index++;
+                    }//DateGrid nesne ekleme kodu
+                    var table = $('#example').DataTable();
+                    for(i=0; i<index; i++)
+                    {
+                    var x = jo['user_education'][i];
+                    var okul = x["okul"];
+                    var bolum = x["bolum"];
+                    var tip = x["tip"];
+                    var mezuniyetTarihi = x["mezuniyetTarihi"];
+                    var datee = new Date(mezuniyetTarihi*1000).toLocaleDateString();
+                    $('#example').DataTable().row.add([okul,bolum,datee,tip]).draw();
+                    }
+                    var sicilno = jo["register_no"];
+                    var ad = jo["name"];
+                    var soyad = jo["surname"];
+                    var kartno = jo["card_no"];
+                    var email = jo["email"];
+                    var cinsiyet = jo["gender"];
+                    $("#sicilno").val(sicilno);
+                    $("#ad").val(ad);
+                    $("#soyad").val(soyad);
+                    $("#kartno").val(kartno);
+                    $("#email").val(email);
+                    if(cinsiyet=="m") document.getElementById("m").checked = true;
+                    else document.getElementById("f").checked = true;
+                    var tc = jo["id_no"];
+                    var anne = jo["mother_name"];
+                    var baba = jo["father_name"];
+                    dogumyeri = jo["birth_place"];
+                    document.getElementById("dogumyeri").selectedIndex=dogumyeri-1;
+                    //datebox ekleme kodu
+                    var dogumtarihi = jo["dob"];
+                    var date = new Date(dogumtarihi*1000)
+                    var yil = date.getFullYear();
+                    var ay = (date.getMonth()+1);
+                    var gun = date.getDate();
+                    var ayy,gunn;
+                    if(ay== 1 || ay==2 || ay==3 || ay==4 || ay==5 || ay==6 || ay==7 || ay==8 || ay==9) ayy = "0"+ay;
+                    else ayy = ay;
+                    if(gun==1 || gun==2 || gun==3 || gun==4 || gun==5 || gun==6 || gun==7 || gun==8 || gun==9) gunn = "0"+gun;
+                    else gunn = gun;
+                    var cikti = yil+"-"+ayy+"-"+gunn;
+                    $("#dogumtarihi").val(cikti);
+                    kangrubu = jo["b_g_id"];
+                    document.getElementById("kangrubu").selectedIndex = kangrubu-1;
+                    var gozluk = jo["eyeglass"];
+                    if(gozluk == 1)var goz = "Gözlük Yok";
+                    else goz="Gözlük Var";
+                    ehliyet = jo["driving_licence_id"];
+                    document.getElementById("ehliyet").selectedIndex = ehliyet-1;
+                    var medenihal = jo["maritial_status"];
+                    if(medenihal==1)var hal ="Bekar";
+                    else hal = "Evli";
+
+                    var sskno = jo["social_security_no"];
+                    //emeklisandik
+                    var tel1 = jo["tel1"];
+                    var tel2 = jo["tel2"];
+                    var acilkisi = jo["called_person"];
+                    var telno = jo["called_person_tel"];
+                    var nodaireno = jo["adres_no"];
+                    var apt = jo["adres_apt"];
+                    var sokak = jo["adres_sokak"];
+                    var cadde = jo["adres_cadde"];
+                    var semt = jo["adres_semt"];
+                    var mahalle = jo["adres_mahalle"];
+                    var ilce = jo["adres_ilce"];
+                    bulunduguil = jo["adres_il"];
+                    document.getElementById("bulunduguil").selectedIndex = bulunduguil-1;
+                    $("#tc").val(tc);
+                    $("#anne").val(anne);
+                    $("#baba").val(baba);
+                    $("#gozluk").append(goz);
+                    $("#medenihal").append(hal);
+                    $("#sskno").val(sskno);
+                    //emeklisandik
+                    $("#tel1").val(tel1);
+                    $("#tel2").val(tel2);
+                    $("#acilkisi").val(acilkisi);
+                    $("#telno").val(telno);
+                    $("#nodaireno").val(nodaireno);
+                    $("#apt").val(apt);
+                    $("#sokak").val(sokak);
+                    $("#cadde").val(cadde);
+                    $("#semt").val(semt);
+                    $("#mahalle").val(mahalle);
+                    $("#ilce").val(ilce);
+                   }
+                 });
+                 $.ajax({
+                   dataType: "xml",
+                   url: "key",success: function(xmll) {
+                     var ehliyetxml = $(xmll).find('drivingLicences');
+                     var ehliyetdonus = ehliyetxml.text();
+                     var ehliyetjo=JSON.parse(ehliyetdonus);
+                     for(i=0; i<10; i++)
+                     {
+                     var ehliyetname = ehliyetjo[i]["name"];
+                     var ehliyetekle = '<option>'+ehliyetname+'</option>';
+                     $("#ehliyet").append(ehliyetekle);
+                     }
+                     var ilxml = $(xmll).find('cities');
+                     var ildonus = ilxml.text();
+                     var iljo=JSON.parse(ildonus);
+                     for(i=0; i<84; i++)
+                     {
+                     var ilname= iljo[i]["name"];
+                     var ilekle = '<option>'+ilname+'</option>';
+                     $("#dogumyeri").append(ilekle);
+                        $("#bulunduguil").append(ilekle);
+                     }
+                     var kanxml = $(xmll).find('bloodGroups');
+                     var kandonus = kanxml.text();
+                     var kanjo = JSON.parse(kandonus);
+                     for(i=0; i<8; i++)
+                     {
+                       var kanname = kanjo[i]['name'];
+                       var kanekle = '<option>'+kanname+'</option>';
+                       $("#kangrubu").append(kanekle);
+                     }
+                   }
+                 });
+           });
+       });
+     </script>
+     <style type="text/css">
+     .altmenu
+     {
+       margin-left: 2%;
+       margin-right: 2%;
+       font-size: 12.5px;
+     }
+     </style>
+  </head>
+  <body>
+        <div class="navbar navbar-inverse navbar-statio-top">
+        <div class="container">
+        <button class="navbar-toggle" data-toggle="collapse" data-target=".acKapa"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      <div class="collapse navbar-collapse acKapa">
+      <font size=1.85px>
+      <ul class="nav navbar-nav">
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Personel ve Yüklenici Yönetim</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Tanımlar</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Devamsızlık ve İzin</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Eğitim Planı</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Güvenlik</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Revir</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Evrak Takip</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Raporlar</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Hedefler</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Kalite Güvence</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"style="color:white;">Bana Özel</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-success btn-xs" type="button">Modül Değiştir</button></a></li>
+      </ul>
+      </div>
+      </font>
+      </div>
+    </div>
+    </div>
+
+<center><label style="font-size:13.5px;">SEFA SUBAŞI Personel (1555)<button class="btn btn-xs btn-block" type="button" style="background-color:#2a2a2a; color:white;">KAYDET</button></label></center>
+
+<div class="altmenu">
+      	<div class="navbar navbar-primary" style="background-color:#ee0000;" role="navigation">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu"><span class="glyphicon glyphicon-menu-down"></span></button>
+                <div class="navbar-collapse collapse" id="menu" >
+                  <ul data-toggle="tab" data-target="#menu" style="padding:0; margin-left:0;">
+                  <ul class="nav navbar-nav">
+                      <li class="active"><a href="#tab1primary" data-toggle="tab" style="color:white;">Genel</a></li>
+                      <li><a href="#tab2primary" data-toggle="tab" style="color:white;">Özlük Bilgileri</a></li>
+                      <li><a href="#tab3primary" data-toggle="tab" style="color:white;">Akademik Eğitim</a></li>
+                      <li><a href="#tab4primary" data-toggle="tab" style="color:white;">Eğitim, Sertifika, Seminer Bilgileri</a></li>
+                      <li><a href="#tab5primary" data-toggle="tab" style="color:white;">Tecrübe</a></li>
+                      <li><a href="#tab6primary" data-toggle="tab" style="color:white;">Disiplin</a></li>
+                      <li><a href="#tab7primary" data-toggle="tab" style="color:white;">Organizasyon</a></li>
+                      <li><a href="#tab8primary" data-toggle="tab" style="color:white;">İzin Durumu</a></li>
+                      <li><a href="#tab9primary" data-toggle="tab" style="color:white;">Devamsızlık</a></li>
+                      <li><a href="#tab10primary" data-toggle="tab" style="color:white;">Personel Evrakları</a></li>
+                      <li><a href="#tab11primary" data-toggle="tab" style="color:white;">Sağlık</a></li>
+                      <li><a href="#tab12primary" data-toggle="tab" style="color:white;">Zimmet</a></li>
+                  </ul>
+                  </ul>
+                </div>
+          </div>
+                    <div class="tab-content">
+                          <div class="tab-pane fade in active" id="tab1primary">
+                          <form class="form-inline">
+                          <div class="form-group">
+                            <div class="container">
+                            <label>Sicil No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="sicilno" type="text" ></input></label></br>
+                            <label>Ad: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="ad" type="text"></input></label></br>
+                            <label>Soyad: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="soyad" type="text"></input></label></br>
+                            <label>Kart No: &nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="kartno" type="text"></input></label></br>
+                            <label>E-Posta:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="email" type="text"></input></label></br>
+                            <label>Cinsiyet:&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="radio" value="erkek" id="f">Kadın</input>&nbsp;&nbsp;&nbsp;&nbsp<input type="radio" name="radio" value="kadin" id="m">Erkek</input></label></br></br>
+                            <div class="yukle_ana">
+                              <div class="yukle_ok"></div>
+                              <div class="yukle_sol"> <input type="file" name="resim" /></div>
+                              <div class="yukle_sag"><button class="yukle_buton"><i class="fa fa-cloud-upload"></i> Yükle</button></div>
+                           </div>
+                           </div>
+                          </div>
+                          </form>
+                          </div>
+                          <div class="tab-pane fade" id="tab2primary">
+                          <form class="form-inline">
+                          <div class="container">
+                          <div class="row">
+                            <div class="col-md-4">
+                            <label>TC Kimlik No:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="tc" type="text"></input></label></br>
+                            <label>Anne Adı: &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="anne" type="text"></input></label></br>
+                            <label>Baba Adı: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="baba" type="text"></input></label></br>
+                            <label>Doğum Yeri:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class="form-control" id="dogumyeri"></select></label></br>
+                            <label>Doğum Tarihi:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" class="form-control" id="dogumtarihi"></label></br>
+                            <label>Kan Grubu:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class="form-control" id="kangrubu"></select></label></br>
+                            <label>Gözlük:&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<select class="form-control"><option id="gozluk"></option></select></label></br>
+                            <label>Ehliyet Sınıfı:&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;<select class="form-control" style="font-size:12px;"id="ehliyet"></select></label></br>
+                            <label>Medeni Hal:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class="form-control"><option id="medenihal"></option></select></label></br>
+                            </div>
+                            <div class="col-md-4">
+                            <label>SSK No:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="sskno" type="text"></input></label></br>
+                            <label>Emekli San. No:&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="emeklisandik" type="text"></input></label></br>
+                            <label>Telefon 1: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="tel1" type="text"></input></label></br>
+                            <label>Telefon 2: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="tel2" type="text"></input></label></br>
+                            <label>Aciliyet Kişisi:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="acilkisi" type="text"></input></label></br>
+                            <label>Acil Telefon No:&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="telno" type="text"></input></label></br>
+                            </div>
+                            <div class="col-md-4" >
+                            <label>No/Daire No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="nodaireno" type="text"></input></label></br>
+                            <label>Site/Apt.:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="apt" type="text"></input></label></br>
+                            <label>Sokak:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="sokak" type="text"></input></label></br>
+                            <label>Cadde:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="cadde" type="text"></input></label></br>
+                            <label>Semt/Bulvar:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="semt" type="text"></input></label></br>
+                            <label>Mahalle:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="mahalle" type="text"></input></label></br>
+                            <label>İlçe:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-control input-sm" id="ilce" type="text"></input></label></br>
+                            <label>Bulunduğu İl:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class="form-control" id="bulunduguil"></select></label>
+                            </div>
+                            </div>
+                        </div>
+                        </form>
+                        </div>
+                        <div class="tab-pane fade" id="tab3primary">
+                          <div class="container">
+                            <div class="table-responsive" style="border:0;">
+                              <table id="example" class="table table-striped table-bordered">
+                                  <thead>
+                                      <tr>
+                                          <th>Okul</th>
+                                          <th>Bölüm</th>
+                                          <th>Mezuniyet Yılı</th>
+                                          <th>Tip</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                        <div class="tab-pane fade" id="tab4primary">Primary 4</div>
+                        <div class="tab-pane fade" id="tab5primary">Primary 5</div>
+                        <div class="tab-pane fade" id="tab6primary">Primary 6</div>
+                        <div class="tab-pane fade" id="tab7primary">Primary 7</div>
+                        <div class="tab-pane fade" id="tab8primary">Primary 8</div>
+                        <div class="tab-pane fade" id="tab9primary">Primary 9</div>
+                        <div class="tab-pane fade" id="tab10primary">Primary 10</div>
+                        <div class="tab-pane fade" id="tab11primary">Primary 11</div>
+                        <div class="tab-pane fade" id="tab12primary">Primary 12</div>
+                    </div>
+                  </div>
+</body>
+</html>
